@@ -7,7 +7,6 @@ from random import randint
 import re
 import sys
 
-""" custom """
 from threatconnect import ThreatConnect
 from threatconnect.Config.FilterOperator import FilterOperator
 from threatconnect.Config.ResourceType import ResourceType
@@ -34,11 +33,6 @@ tc = ThreatConnect(api_access_id, api_secret_key, api_default_org, api_base_url)
 tc.set_api_result_limit(api_result_limit)
 tc.report_enable()
 
-""" Toggle the Boolean to enable specific examples """
-enable_example1 = False
-enable_example2 = False
-enable_example3 = False
-enable_example4 = True
 owners = ['Example Community']
 
 def show_data(result_obj):
@@ -195,122 +189,22 @@ def show_data(result_obj):
 
 
 def main():
-    """ """
-    # set threat connect log (tcl) level
-    tc.set_tcl_file('log/tc.log', 'debug')
-    tc.set_tcl_console_level('critical')
 
-    if enable_example1:
-        """ get community/source status using basic retrieve """
+    # build INDICATORS request object
+    ro = RequestObject()
+    ro.set_http_method('GET')
+    #ro.set_owner(owners)
+    #ro.set_owner_allowed(True)
+    ro.set_resource_pagination(True)
+    ro.set_request_uri('/v2/indicators/bulk/csv')
 
-        # build INDICATORS request object
-        #
-        ro = RequestObject()
-        ro.set_http_method('GET')
-        ro.set_owner(owners)
-        ro.set_owner_allowed(True)
-        ro.set_resource_pagination(True)
-        ro.set_request_uri('/v2/indicators/bulk')
-
-        #
-        # retrieve and display the results
-        #
-        try:
-            results = tc.api_request(ro)
-        except RuntimeError as e:
-            print(e)
-            sys.exit(1)
-
-        if results.headers['content-type'] == 'application/json':
-            data = results.json()
-            print(json.dumps(data, indent=4))
-
-    if enable_example2:
-        """ get bulk indicators """
-
-        # optionally set max results
-        tc.set_api_result_limit(500)
-
-        # indicator object
-        indicators = tc.bulk_indicators()
-
-        # filter results
-        try:
-            filter1 = indicators.add_filter()
-            filter1.add_owner(owners)
-            # filter1.add_pf_confidence(90, FilterOperator.GE)
-            # filter1.add_pf_date_added('2014-04-10T00:00:00Z', FilterOperator.GE)
-            # filter1.add_pf_rating('4.0', FilterOperator.GE)
-            # filter1.add_pf_type('Host')
-            # filter1.add_pf_type('Address')
-            # filter1.add_pf_last_modified('2015-01-21T00:31:44Z', FilterOperator.GE)
-            # filter1.add_pf_threat_assess_confidence('50', FilterOperator.GE)
-            # filter1.add_pf_threat_assess_rating('4.0', FilterOperator.GE)
-            # filter1.add_pf_tag('EXAMPLE', FilterOperator.EQ)
-            # filter1.add_pf_attribute('Description', FilterOperator.EQ)
-        except AttributeError as e:
-            print('Error: {0!s}'.format(e))
-            sys.exit(1)
-
-        # retrieve indicators
-        try:
-            indicators.retrieve()
-        except RuntimeError as e:
-            print('Error: {0!s}'.format(e))
-            sys.exit(1)
-
-        # show indicator data
-        show_data(indicators)
-
-    if enable_example3:
-        """ get bulk indicators """
-
-        # optionally set max results
-        tc.set_api_result_limit(500)
-
-        # indicator object
-        indicators = tc.bulk_indicators()
-
-        # filter results
-        try:
-            filter1 = indicators.add_filter()
-            filter1.add_owner(owners)
-            # filter1.add_pf_confidence(50, FilterOperator.GE)
-            # filter1.add_pf_rating('2.5', FilterOperator.GE)
-            filter1.add_pf_tag('CnC', FilterOperator.EQ)
-        except AttributeError as e:
-            print('Error: {0!s}'.format(e))
-            sys.exit(1)
-
-        # retrieve indicators
-        try:
-            indicators.retrieve()
-        except RuntimeError as e:
-            print('Error: {0!s}'.format(e))
-            sys.exit(1)
-
-        # show indicator data
-        show_data(indicators)
-
-    if enable_example4:
-        """ get bulk indicator in csv format """
-
-        # build INDICATORS request object
-        #
-        ro = RequestObject()
-        ro.set_http_method('GET')
-        ro.set_owner(owners)
-        ro.set_owner_allowed(True)
-        ro.set_resource_pagination(True)
-        ro.set_request_uri('/v2/indicators/bulk/csv')
-
-        #
-        # retrieve and display the results
-        #
-        results = tc.api_request(ro)
-        if results.headers['content-type'] == 'text/csv':
-            data = results.content
-            print(data)
+    #
+    # retrieve and display the results
+    #
+    results = tc.api_request(ro)
+    if results.headers['content-type'] == 'text/csv':
+        data = results.content
+        print(data)
 
 if __name__ == "__main__":
     main()
