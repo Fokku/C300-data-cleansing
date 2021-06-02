@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """ standard """
-import ConfigParser
+import configparser as ConfigParser
 import json
 from random import randint
 import re
@@ -33,7 +33,7 @@ tc = ThreatConnect(api_access_id, api_secret_key, api_default_org, api_base_url)
 tc.set_api_result_limit(api_result_limit)
 tc.report_enable()
 
-owners = ['Example Community']
+owners = ['Blocklist.de SSH IPs']
 
 def show_data(result_obj):
     """  """
@@ -194,7 +194,7 @@ def main():
     ro = RequestObject()
     ro.set_http_method('GET')
     #ro.set_owner(owners)
-    #ro.set_owner_allowed(True)
+    ro.set_owner_allowed(False)
     ro.set_resource_pagination(True)
     ro.set_request_uri('/v2/indicators/bulk/csv')
 
