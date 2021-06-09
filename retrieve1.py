@@ -6,11 +6,11 @@ import re
 import sys
 
 """ custom """
-from threatconnect import ThreatConnect
-from threatconnect.Config.FilterOperator import FilterOperator
-from threatconnect.Config.ResourceType import ResourceType
-from threatconnect.RequestObject import RequestObject
-from threatconnect.Config.IndicatorType import IndicatorType
+from threatconnect1 import ThreatConnect
+from threatconnect1.Config.FilterOperator import FilterOperator
+from threatconnect1.Config.ResourceType import ResourceType
+from threatconnect1.RequestObject import RequestObject
+from threatconnect1.Config.IndicatorType import IndicatorType
 
 # configuration file
 config_file = "tc.conf"
