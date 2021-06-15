@@ -20,6 +20,13 @@ except ConfigParser.NoOptionError:
 tc = ThreatConnect(api_access_id, api_secret_key, api_default_org, api_base_url)
 owners = tc.owners()
 
+try:
+    # retrieve the Owners
+    owners.retrieve()
+except RuntimeError as e:
+    print('Error: {0}'.format(e))
+    sys.exit(1)
+
 def getOwnerNames():
     namelist = []
     for owner in owners:

@@ -48,8 +48,8 @@ class csv:
                 col["Rating"].append(indicator.rating)
                 col["Confidence"].append(indicator.confidence)
                 col["DateAdded"].append(indicator.date_added)
-                col["Description"].append(util.attributeCheck(indicator.description))
-                col["Source"].append(util.attributeCheck(indicator.source))
+                col["Description"].append(indicator.description) if len(indicator.description) > 0 or indicator.description != None else "0"
+                col["Source"].append(indicator.source) if len(indicator.source) > 0 or indicator.description != None else "0"
 
                 if len(indicator.tags) > 0:
                     for tag in indicator.tags:
@@ -64,12 +64,12 @@ class csv:
                 col["Value"].append(value)
                 """
             return col
-        except:
-            print("Invalid indicator object")
+        except Exception as exception:
+            assert exception.__class__.__name__ == "NameError"
 
     def tocsv(self, data):
         try:
             df = pd.DataFrame(data)
             df.to_csv(self.filename)
-        except:
-            print("Cannot export to csv")
+        except Exception as exception:
+            assert exception.__class__.__name__ == "NameError"
