@@ -1,4 +1,4 @@
 TODO:
 
-Standardize country values (tags)
-Add filters to retrieve latest indicators
+Standardize country values (tags) - DONE
+Add filters to retrieve latest indicators - ALMOST DONE (HAS ERROR WTF)

@@ -5,6 +5,7 @@ import os
 
 import owners
 import util
+import datacleansing as dtc
 
 class csv:
     pcol = {
@@ -29,6 +30,8 @@ class csv:
         "Tags": []
     }
 
+    dc = dtc.dataCleanse()
+
     f_name_directory = os.getcwd() + r"\csv"
     n_files = len(os.listdir(f_name_directory))
     filename = os.path.join(f_name_directory, "{}.csv".format(n_files))
@@ -48,12 +51,17 @@ class csv:
                 col["Rating"].append(indicator.rating)
                 col["Confidence"].append(indicator.confidence)
                 col["DateAdded"].append(indicator.date_added)
-                col["Description"].append(indicator.description) if len(indicator.description) > 0 or indicator.description != None else "0"
-                col["Source"].append(indicator.source) if len(indicator.source) > 0 or indicator.description != None else "0"
+                col["Description"].append(indicator.description if not self.dc.checkForEmptyValues(indicator.description) else "0")
+                col["Source"].append(indicator.source if not self.dc.checkForEmptyValues(indicator.source) else "0")
 
                 if len(indicator.tags) > 0:
                     for tag in indicator.tags:
-                        tagname += tag.name + ";"
+                        type = bool(self.dc.checkCountryCodeType(tag.name))
+                        if type:
+                            tagname = self.convertToCountryObject(tag=tag, type=type).name
+                        else:
+                            tagname = tag.name
+                        tagname += ";"
                 else:
                     tagname = "0"
                 col["Tags"].append(tagname)
@@ -69,7 +77,7 @@ class csv:
 
     def tocsv(self, data):
         try:
-            df = pd.DataFrame(data)
+            df = pd.DataFrame.from_dict(data, orient='columns', columns=None)
             df.to_csv(self.filename)
         except Exception as exception:
             assert exception.__class__.__name__ == "NameError"

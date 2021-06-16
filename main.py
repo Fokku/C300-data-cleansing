@@ -20,6 +20,7 @@ try:
     api_default_org = config.get('threatconnect', 'api_default_org')
     api_base_url = config.get('threatconnect', 'api_base_url')
     api_result_limit = int(config.get('threatconnect', 'api_result_limit'))
+    api_export_weekly = bool(config.get('threatconnect', 'api_export_weekly'))
 except ConfigParser.NoOptionError:
     print('Could not retrieve configuration file.')
     sys.exit(1)
@@ -40,18 +41,19 @@ print("Owner list: " + str(owners))
 
 # TESTING PURPOSES
 # owners = ["abuse.ch Feodo Tracker", "Botvrij IPs"]
-owners = ["Firebog Prigent Phishing Domains", 'hpHosts Malware Distribution Domains', 'abuse.ch Zeus Tracker', 'hpHosts Phishing Domains']
+# owners = ["Firebog Prigent Phishing Domains", 'hpHosts Malware Distribution Domains', 'abuse.ch Zeus Tracker', 'hpHosts Phishing Domains']
 
 for owner in owners:
     print("Retrieving indicators for " + owner + "...")
 
     indicators = tc.bulk_indicators()
-    filter = indicators.add_filter()
-    filter.add_owner(owner)
+    i_filter = indicators.add_filter()
+    i_filter.add_owner(owner)
 
     # special lil filter for indicators added greater than a week ago
-    # batch retrieve every week
-    filter.add_pf_date_added(previous_week_datestamp, FilterOperator.GT)
+    # batch retrieve every week | can be changed in config
+    if api_export_weekly:
+        i_filter.add_pf_date_added(previous_week_datestamp, FilterOperator.GT)
 
     try:
         # retrieve the Indicators

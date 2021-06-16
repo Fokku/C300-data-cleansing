@@ -9,7 +9,7 @@ import util
 
 class threatConnect1:
 
-    def __init__(self, ):
+    def __init__(self):
     # config
     config_file = "tc.conf"
     f_name_directory = os.getcwd() + r"\csv"
