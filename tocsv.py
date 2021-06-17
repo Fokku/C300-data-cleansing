@@ -2,12 +2,14 @@ import configparser as ConfigParser
 import sys
 import pandas as pd
 import os
+from datetime import datetime
+import time
 
 import owners
-import util
 import datacleansing as dtc
 
 class csv:
+
     pcol = {
         "Indicator": [],
         "Type": [],
@@ -31,17 +33,17 @@ class csv:
     }
 
     dc = dtc.dataCleanse()
+    now = datetime.now()
 
-    f_name_directory = os.getcwd() + r"\csv"
-    n_files = len(os.listdir(f_name_directory))
-    filename = os.path.join(f_name_directory, "{}.csv".format(n_files))
+    log_directory = os.getcwd() + r"\log"
+    log_filename = os.path.join(log_directory, "{}.csv".format(now.strftime("%Y%m%dT%H%M%S")))
 
     def format(self, indicators):
         col = self.pcol
         try:
             for indicator in indicators:
                 tagname = ""
-                #value = ""
+                # value = ""
                 indicator.load_attributes()
                 indicator.load_tags()
 
@@ -56,11 +58,14 @@ class csv:
 
                 if len(indicator.tags) > 0:
                     for tag in indicator.tags:
-                        type = bool(self.dc.checkCountryCodeType(tag.name))
-                        if type:
-                            tagname = self.convertToCountryObject(tag=tag, type=type).name
+                        if pd.notna(tag):
+                            c_type = self.dc.checkCountryCodeType(tag.name)
+                            if bool(c_type):
+                                tagname = self.dc.convertToCountryObject(tag=tag.name, type=c_type).name
+                            else:
+                                tagname = tag.name
                         else:
-                            tagname = tag.name
+                            tagname = ""
                         tagname += ";"
                 else:
                     tagname = "0"
@@ -75,9 +80,12 @@ class csv:
         except Exception as exception:
             assert exception.__class__.__name__ == "NameError"
 
-    def tocsv(self, data):
+    def tocsv(self, data, directory, logging=True):
         try:
             df = pd.DataFrame.from_dict(data, orient='columns', columns=None)
-            df.to_csv(self.filename)
+            df.to_csv(directory)
+            time.sleep(5)
+            if logging:
+                df.to_csv(self.log_filename)
         except Exception as exception:
             assert exception.__class__.__name__ == "NameError"

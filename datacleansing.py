@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import pycountry
+import re
 
 class dataCleanse:
     c_names = [country.name for country in pycountry.countries]
@@ -16,6 +17,7 @@ class dataCleanse:
             return False
 
     def convertToCountryObject(self, tag, type):
+        print(tag)
         if type == "Alpha 2":
             return pycountry.countries.get(alpha_2=tag)
         elif type == "Alpha 3":
