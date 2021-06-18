@@ -55,7 +55,7 @@ print("Owner list: " + str(owners))
 # TESTING PURPOSES
 # owners = ["abuse.ch Feodo Tracker", "Botvrij IPs"]
 # owners = ["Firebog Prigent Phishing Domains", 'hpHosts Malware Distribution Domains', 'abuse.ch Zeus Tracker', 'hpHosts Phishing Domains']
-owners = ["Blocklist.de SIP IPs", "VXVault", "DShield.org Recommended Blocklist CIDRs"]
+# owners = ["Blocklist.de SIP IPs", "VXVault", "DShield.org Recommended Blocklist CIDRs"]
 
 for owner in owners:
     print("Retrieving indicators for " + owner + "...")

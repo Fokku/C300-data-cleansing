@@ -4,6 +4,7 @@ import pandas as pd
 import os
 from datetime import datetime
 import time
+import re
 
 import owners
 import datacleansing as dtc
@@ -61,7 +62,7 @@ class csv:
                         if pd.notna(tag):
                             c_type = self.dc.checkCountryCodeType(tag.name)
                             if bool(c_type):
-                                tagname = self.dc.convertToCountryObject(tag=tag.name, type=c_type).name
+                                tagname = self.dc.convertToCountryObject(tag=tag.name, t_type=c_type).name
                             else:
                                 tagname = tag.name
                         else:
