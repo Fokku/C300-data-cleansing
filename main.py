@@ -33,6 +33,7 @@ tc.set_api_result_limit(api_result_limit)
 csv = tocsv.csv()
 
 # directory configurations // idea: set it in config file
+# if you are running this in the linux server with ML, change r"\csv" to r"\mhscript"
 f_name_directory = os.getcwd() + r"\csv"
 n_files = len(os.listdir(f_name_directory))
 if n_files > 0:
@@ -49,10 +50,7 @@ today = datetime.datetime.today()
 delta = datetime.timedelta(days=api_export_days)
 previous_days_datestamp = (today - delta).isoformat() + 'Z'
 
-print(previous_days_datestamp)
-
 owners = owners.getOwnerNames()
-print("Owner list: " + str(owners))
 
 # TEST GROUPS
 # owners = ["abuse.ch Feodo Tracker", "Botvrij IPs"]
@@ -60,7 +58,7 @@ print("Owner list: " + str(owners))
 # owners = ["CAL Finance-themed NRDs"]
 
 for owner in owners:
-    print("Retrieving indicators for " + owner + "...")
+    print("Retrieving indicators for {}...".format(owner))
 
     indicators = tc.bulk_indicators()
     i_filter = indicators.add_filter()
@@ -78,6 +76,6 @@ for owner in owners:
         sys.exit(1)
 
     p_csv = csv.format(indicators)
-    print(p_csv)
+    print("Retrieved indicators for {}!".format(owner))
 
 csv.tocsv(p_csv, directory=filename, logging=True)
