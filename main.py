@@ -39,7 +39,7 @@ if n_files > 0:
     print("CSV file already exists in {}".format(f_name_directory))
     print("Deleting csv file")
     if not bool((input("Press ENTER to continue...\n"))):
-        os.remove(path=f_name_directory + r"\1.csv")
+        os.remove(path=f_name_directory + r"\0.csv")
     else:
         raise AssertionError
 filename = os.path.join(f_name_directory, "{}.csv".format(n_files))
@@ -49,13 +49,15 @@ today = datetime.datetime.today()
 delta = datetime.timedelta(days=api_export_days)
 previous_days_datestamp = (today - delta).isoformat() + 'Z'
 
+print(previous_days_datestamp)
+
 owners = owners.getOwnerNames()
 print("Owner list: " + str(owners))
 
-# TESTING PURPOSES
+# TEST GROUPS
 # owners = ["abuse.ch Feodo Tracker", "Botvrij IPs"]
 # owners = ["Firebog Prigent Phishing Domains", 'hpHosts Malware Distribution Domains', 'abuse.ch Zeus Tracker', 'hpHosts Phishing Domains']
-# owners = ["Blocklist.de SIP IPs", "VXVault", "DShield.org Recommended Blocklist CIDRs"]
+# owners = ["CAL Finance-themed NRDs"]
 
 for owner in owners:
     print("Retrieving indicators for " + owner + "...")

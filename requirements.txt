@@ -1,0 +1,5 @@
+configparser==5.0.2
+pandas==1.2.0
+threatconnect==2.4.21
+pycountry==20.7.3
+numpy==1.19.5
