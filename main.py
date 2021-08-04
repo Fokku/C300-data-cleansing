@@ -83,5 +83,7 @@ try:
 except:
     pass
 finally:
+    print("Running ML scripts")
     os.system(r"python3 /home/user/Desktop/Scripts/mhscript/main.py")
+
 
