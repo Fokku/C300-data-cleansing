@@ -78,4 +78,10 @@ for owner in owners:
     p_csv = csv.format(indicators)
     print("Retrieved indicators for {}!".format(owner))
 
-csv.tocsv(p_csv, directory=filename, logging=True)
+try:
+    csv.tocsv(p_csv, directory=filename, logging=True)
+except:
+    pass
+finally:
+    os.system(r"python3 /home/user/Desktop/Scripts/mhscript/main.py")
+
